@@ -15,9 +15,18 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
-
+@app.route('/')
+def show_home():
+    return render_template('home.html')
 
 
 if __name__ == '__main__':
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
+
+
+"""
+Main page that prints all data. Really?
+
+
+"""
