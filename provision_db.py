@@ -5,7 +5,7 @@ __author__ = 'seb'
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from database import Base, User, Category, Item
+from database import Base, User, Project, Task
 
 engine = create_engine('sqlite:///catalog.db')
 # Bind the engine to the metadata of the Base class so that the
@@ -30,11 +30,11 @@ session.commit()
 
 items = []
 
-items.append(Category(user_id=1, description="Theresa Cat 1"))
-items.append(Category(user_id=1, description="Theresa Cat 2"))
-items.append(Category(user_id=2, description="Seb Cat 1"))
+items.append(Project(user_id=1, description="Theresa Cat 1"))
+items.append(Project(user_id=1, description="Theresa Cat 2"))
+items.append(Project(user_id=2, description="Seb Cat 1"))
 
-items.append(Item(user_id=1, category_id=1, title="Ein Titel",
+items.append(Task(user_id=1, category_id=1, title="Ein Titel",
                   description="Eine Beschreibung"))
 for item in items:
     session.add(item)

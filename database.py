@@ -23,20 +23,20 @@ class User(Base):
     picture = Column(String(250))
 
     categories = relationship("Category", backref="User")
-    items = relationship("Item", backref="User")
+    items = relationship("Task", backref="User")
 
 
-class Category(Base):
+class Project(Base):
     __tablename__ = "category"
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"))
     description = Column(String(450), nullable=False)
 
-    items = relationship("Item", backref="Category")
+    items = relationship("Task", backref="Category")
 
 
-class Item(Base):
-    __tablename__ = "item"
+class Task(Base):
+    __tablename__ = "task"
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"))
     category_id = Column(Integer, ForeignKey("category.id"))
