@@ -17,7 +17,9 @@ session = DBSession()
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    projects = session.query(Project).all()
+
+    return render_template('home.html', projects=projects)
 
 
 @app.route('/project/create')

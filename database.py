@@ -22,24 +22,24 @@ class User(Base):
     email = Column(String(250), nullable=False)
     picture = Column(String(250))
 
-    categories = relationship("Category", backref="User")
-    items = relationship("Task", backref="User")
+    project = relationship("Project", backref="User")
+    tasks = relationship("Task", backref="User")
 
 
 class Project(Base):
-    __tablename__ = "category"
+    __tablename__ = "project"
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"))
-    description = Column(String(450), nullable=False)
+    name= Column(String(450), nullable=False)
 
-    items = relationship("Task", backref="Category")
+    tasks = relationship("Task", backref="Project")
 
 
 class Task(Base):
     __tablename__ = "task"
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"))
-    category_id = Column(Integer, ForeignKey("category.id"))
+    project_id = Column(Integer, ForeignKey("project.id"))
     title = Column(String(250), nullable=False)
     description = Column(String(450), nullable=False)
     is_done = Column(Boolean, unique=False, default=False)
