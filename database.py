@@ -34,6 +34,14 @@ class Project(Base):
 
     tasks = relationship("Task", backref="Project")
 
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'name': self.name,
+        }
+
 
 class Task(Base):
     __tablename__ = "task"
@@ -41,8 +49,19 @@ class Task(Base):
     user_id = Column(Integer, ForeignKey("user.id"))
     project_id = Column(Integer, ForeignKey("project.id"))
     title = Column(String(250), nullable=False)
-    description = Column(String(450), nullable=False)
+    description = Column(String(450), nullable=True)
     is_done = Column(Boolean, unique=False, default=False)
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'project_id': self.project_id,
+            'title': self.title,
+            'description': self.description,
+            'is_done': self.is_done
+        }
 
 
 engine = create_engine('sqlite:///catalog.db')

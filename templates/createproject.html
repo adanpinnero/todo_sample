@@ -1,6 +1,17 @@
 {% extends "layout.html" %}
 {% block content %}
-  <div class="jumbo">
+<div class="jumbo">
     <h2>Create Project</h2>
-  </div>
+</div>
+<br/>
+<div class="main">
+    <form action="#" method="post">
+        <label for="project_name">Project Name</label><br/>
+        <input type="text" size="50" name="project_name" id="project_name"/>
+
+        <p>
+            <input type="submit" value="Create"/>
+        </p>
+    </form>
+</div>
 {% endblock %}

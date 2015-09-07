@@ -14,19 +14,17 @@
           <ul class="menu">
             <li><a href="{{ url_for('home') }}">Home</a></li>
             <li><a href="{{ url_for('create_project') }}">Create Project</a></li>
-             <li><a href="{{ url_for('create_task') }}">Create Task</a></li>
           </ul>
         </nav></strong>
       </div>
     </header>
 
     <div id="sidebar">
-        <h1>Sidebar</h1>
+        <h1>Projects</h1>
         <ul>
-            {% for project in projects %}
-            <li>
-                {{project.name}}
-            </li>
+            {% for project in g.projects %}
+            <li><a href="{{ url_for('view_project',
+                       project_id=project.id) }}">{{ project.name }}</a></li>
             {% endfor %}
         </ul>
     </div>

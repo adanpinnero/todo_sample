@@ -1,6 +1,17 @@
 {% extends "layout.html" %}
 {% block content %}
-  <div class="jumbo">
+<div class="jumbo">
     <h2>Create Task</h2>
-  </div>
+</div>
+<div class="main">
+    <form action="#" method="post">
+        <label for="title">Title</label><br/>
+        <input type="text" size="100" name="title" id="title"/><br/><br/>
+        <label for="description">Description</label><br/>
+        <textarea name="description" id="description" cols="30" rows="10"></textarea>
+        <p>
+            <input type="submit" value="Create"/>
+        </p>
+    </form>
+</div>
 {% endblock %}
