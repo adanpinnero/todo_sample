@@ -12,6 +12,7 @@ and open your browser on localhost:5000.
 
 ## Usage
 You need to log in with a Googlemail account. This will allow you to create Projects and Tasks.
+Tasks and Projects can bee added, edited and deleted.
 
 ## Limitations
 The following are steps that should be taken to improve the app:
