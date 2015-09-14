@@ -30,10 +30,11 @@ class Project(Base):
     __tablename__ = "project"
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"))
-    name= Column(String(450), nullable=False)
+    name = Column(String(450), nullable=False)
 
     tasks = relationship("Task", backref="Project")
 
+    # property is used for JSON API
     @property
     def serialize(self):
         return {

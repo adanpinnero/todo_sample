@@ -5,11 +5,9 @@ from flask import Flask, render_template, request, redirect, jsonify, url_for, g
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
 from database import Base, User, Project, Task
-from functions import *
 from flask import session as login_session
 import random, string
 
-# IMPORTS FOR THIS STEP
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
@@ -28,7 +26,7 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-
+# fetch the data for the sidebar before every request
 @app.before_request
 def get_sidebar():
     g.projects = session.query(Project).all()
@@ -41,36 +39,41 @@ def home():
     return render_template('home.html')
 
 
-# ## Project ## #
+# Project Methods #
 @app.route('/project/create', methods=['GET', 'POST'])
 def create_project():
+    # are we logged in?
     if 'username' not in login_session:
         return redirect('/login')
+
+    # check for POST data
     if request.method == 'POST':
+        # create new Project and send it to db
         project = Project(name=request.form['project_name'],
                           user_id=login_session['userid'])
         session.add(project)
         session.commit()
-        # todo redirect to the newly created project instead of home
         return redirect(url_for('view_project', project_id=project.id))
     else:
         return render_template('createproject.html')
 
 
-# only the name can be edited
+# only the project name can be edited
 @app.route('/project/edit/<int:project_id>/', methods=['GET', 'POST'])
 def edit_project(project_id):
     if 'username' not in login_session:
         return redirect('/login')
+
+    # fetch Project by id
     project = session.query(Project) \
         .filter(Project.id == project_id).one()
 
     # bail if this isn't your project
     if not project.user_id == login_session['userid']:
-        flash('Your logged in user does not match the item '
-              'you tried to interact with - going home')
+        flash('These are not the droids you are looking for - redirecting home')
         return render_template('home.html')
 
+    # if data was sumbitted - use it - otherwise show the edit page
     if request.method == 'POST':
         project.name = request.form['project_name']
         session.add(project)
@@ -84,38 +87,38 @@ def edit_project(project_id):
 def delete_project(project_id):
     if 'username' not in login_session:
         return redirect('/login')
+
     project = session.query(Project) \
         .filter(Project.id == project_id).one()
 
     # bail if this isn't your project
     if not project.user_id == login_session['userid']:
-        flash('Your logged in user does not match the item '
+        flash('Your logged in user does not match the project '
               'you tried to interact with - going home')
         return render_template('home.html')
 
     if request.method == 'POST':
         session.delete(project)
         session.commit()
+        flash('Project has been deleted')
         return redirect(url_for('home'))
-        # todo splash "project deleted"
     else:
         return render_template('deleteproject.html', project=project)
 
 
 @app.route('/project/view/<int:project_id>/')
 def view_project(project_id):
-    # I'm loading the data for the sidebar so maybe I should use that
-    # instead of querying the db twice
     project = session.query(Project).\
         filter(Project.id == project_id).one()
     return render_template('viewproject.html', project=project)
 
 
-# ## Tasks ## #
+# Task Methods #
 @app.route('/task/create/<int:project_id>/', methods=['GET', 'POST'])
 def create_task(project_id):
     if 'username' not in login_session:
         return redirect('/login')
+
     if request.method == 'POST':
         # why can't I pass the params dict?
         params = {"user_id": 1, "project_id": project_id,
@@ -127,17 +130,16 @@ def create_task(project_id):
                     description=request.form['description'])
         session.add(task)
         session.commit()
-        # todo redirect to the newly created project instead of home
-        #return redirect(render_template('viewproject.html',
-        #                project_id=project_id))
         return redirect(url_for('view_project', project_id=project_id))
     else:
         return render_template('createtask.html', project_id=project_id)
+
 
 @app.route('/task/edit/<int:task_id>/', methods=['GET', 'POST'])
 def edit_task(task_id):
     if 'username' not in login_session:
         return redirect('/login')
+
     task = session.query(Task).filter(Task.id == task_id).one()
 
     if not task.user_id == login_session['userid']:
@@ -149,7 +151,6 @@ def edit_task(task_id):
         task.description = request.form['description']
         session.add(task)
         session.commit()
-        # todo add viewtask page and redirect there- make that edit also, JavaS
         return redirect(url_for('view_project',
                                 project_id=task.Project.id))
     else:
@@ -160,6 +161,7 @@ def edit_task(task_id):
 def delete_task(task_id):
     if 'username' not in login_session:
         return redirect('/login')
+
     task = session.query(Task).filter(Task.id == task_id).one()
 
     if not task.user_id == login_session['userid']:
@@ -207,6 +209,7 @@ def show_login():
     return render_template('login.html', STATE=state)
 
 
+# copied from UDACITY
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     # Validate state token
@@ -346,7 +349,3 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 
 
-"""
-Main page that prints all data. Really?
-
-"""
