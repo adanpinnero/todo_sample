@@ -16,7 +16,8 @@ class User(Base):
     name = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
     picture = Column(String(250))
-
+    
+    # create relationship to other models 
     project = relationship("Project", backref="User")
     tasks = relationship("Task", backref="User")
 
@@ -27,6 +28,7 @@ class Project(Base):
     user_id = Column(Integer, ForeignKey("user.id"))
     name = Column(String(450), nullable=False)
 
+    # create relationship to Task
     tasks = relationship("Task", backref="Project")
 
     # property is used for JSON API
@@ -46,6 +48,7 @@ class Task(Base):
     project_id = Column(Integer, ForeignKey("project.id"))
     title = Column(String(250), nullable=False)
     description = Column(String(450), nullable=True)
+    # not currently used
     is_done = Column(Boolean, unique=False, default=False)
 
     @property
