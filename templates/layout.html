@@ -30,7 +30,12 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="{{ url_for('home') }}">Home</a></li>
+                {% if not session['username'] %}
+                <li><a href="{{ url_for('show_login') }}">Login</a></li>
+                {% else %}
                 <li><a href="{{ url_for('create_project') }}">Create Project</a></li>
+                {% endif %}
+
             </ul>
         </div>
 
