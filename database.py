@@ -5,11 +5,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 
-"""
-create sql alchemy models for User Category Item
-    look at code from udacity
-run setup to populate db with one entry for each
-"""
 
 #  common base class for all Models(?) to inherit from
 Base = declarative_base()

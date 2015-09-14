@@ -6,7 +6,8 @@ from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
 from database import Base, User, Project, Task
 from flask import session as login_session
-import random, string
+import random
+import string
 
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
